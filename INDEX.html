@@ -1,31 +1,62 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>GLM WEB CLASS</title>
-    </head>
+<head>
+    <title>AI Ad Predictor</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f9; }
+        .container { background: white; padding: 30px; border-radius: 10px; display: inline-block; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); }
+        input { padding: 10px; margin: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        #result { margin-top: 20px; font-size: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
 
-    <body>
-    <h2>Welcome to GLM</h2>
-    <P>Come and experince the presence of GOD this coming TAKE IT!</P>
+    <div class="container">
+        <h2>AI Ad Click Predictor 🤖</h2>
+        <p>Enter user details to see if they will click the ad.</p>
+        
+        <input type="number" id="age" placeholder="Age (e.g., 50)">
+        <input type="number" id="time" placeholder="Time on site (e.g., 25)">
+        <br>
+        <button onclick="predict()">Predict!</button>
+        
+        <div id="result"></div>
+    </div>
 
-    <hr>
-    
-    <h3>Manifest conference</h3>
-    <br>
-    <p>Happening live at Ado Ekiti, Nov 1 to 3rd</p>
+    <script>
+        function predict() {
+            const age = document.getElementById('age').value;
+            const time = document.getElementById('time').value;
+            const resultDiv = document.getElementById('result');
 
+            if (!age || !time) {
+                resultDiv.innerHTML = "Please enter both age and time!";
+                resultDiv.style.color = "red";
+                return;
+            }
 
-    <a href="https://google.com">
-        go to google
-    </a>
+            resultDiv.innerHTML = "Thinking...";
+            resultDiv.style.color = "black";
 
-    <a href="https://facebook.com" go to facebook>
-        go to facebook
-    </a>
-
-    <a href="https://twitter.com">
-        go to twitter
-    </a>
-
-    </body>
-
+            // Talk to our Python API
+            fetch(`/predict?age=${age}&time=${time}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.prediction === 1) {
+                        resultDiv.innerHTML = "✅ Prediction: 1 (Will Click!)";
+                        resultDiv.style.color = "green";
+                    } else {
+                        resultDiv.innerHTML = "❌ Prediction: 0 (Will NOT Click)";
+                        resultDiv.style.color = "red";
+                    }
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = "Error connecting to API.";
+                    resultDiv.style.color = "red";
+                });
+        }
+    </script>
+</body>
 </html>
